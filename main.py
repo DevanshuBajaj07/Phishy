@@ -1,19 +1,25 @@
-# main.py
+# =================== main.py ===================
+# This file provides the entry point and user interface for the penetration testing tool.
+
 from recon import run_recon
 from scanner import run_scan
 from exploit import run_exploits
 from reporter import Reporter
 
-
 def full_scan(target_url, reporter):
+    """
+    Performs a full scan: recon -> scan -> exploit.
+    """
     hostname, ip = run_recon(target_url, reporter)
     if ip:
         run_scan(ip, reporter)
     run_exploits(target_url, reporter)
     reporter.finalize()
 
-
 def menu():
+    """
+    Provides a CLI menu to choose between different scan options.
+    """
     reporter = Reporter()
     target = input("Enter target URL (e.g., http://testphp.vulnweb.com): ").strip()
     print("\nSelect Scan Option:")
@@ -39,7 +45,6 @@ def menu():
         reporter.finalize()
     else:
         print("Exiting.")
-
 
 if __name__ == "__main__":
     menu()
