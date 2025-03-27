@@ -1,31 +1,36 @@
 
 # 🛡️ Python Penetration Testing Framework
 
-A lightweight, modular penetration testing tool written in Python. This tool performs basic reconnaissance, vulnerability scanning, and simulated exploitation of common web vulnerabilities — all with auto-generated reports in both **TXT** and **PDF** formats.
+A modular and extensible penetration testing framework built in Python. It performs reconnaissance, vulnerability scanning, simulated exploits, and generates detailed multi-format reports (TXT, PDF, JSON, HTML).
 
 ---
 
 ## 📦 Features
 
-- 🌐 **Reconnaissance**:  
-  - DNS & IP resolution  
-  - HTTP header analysis  
-  - `robots.txt` scraping  
-  - WHOIS lookup
+- 🌐 **Reconnaissance**
+  - DNS & IP resolution
+  - HTTP header inspection
+  - `robots.txt` discovery
+  - WHOIS domain lookup
 
-- 🔍 **Scanning**:  
-  - Nmap-based port and service scanning  
-  - Simulated CVE detection for known services
+- 🔍 **Scanning**
+  - Port and service discovery using Nmap
+  - Simulated vulnerability detection for known services (CVE-like)
 
-- 💥 **Exploitation (Simulated)**:  
-  - Weak credential brute force  
-  - SQL Injection detection  
-  - Reflected XSS injection  
+- 💥 **Exploitation (Simulated)**
+  - Weak login credential testing (brute force with common combos)
+  - SQL Injection simulation
+  - XSS Injection detection
   - File upload form detection
 
-- 📝 **Reporting**:  
-  - TXT and PDF report generation  
-  - Includes findings, severity, and remediation tips
+- 📝 **Reporting**
+  - Multiple report formats:
+    - ✅ Text (.txt)
+    - ✅ PDF (.pdf)
+    - ✅ JSON (.json)
+    - ✅ HTML (.html)
+  - Severity-based filtering for JSON/HTML
+  - Auto-timestamped metadata
 
 ---
 
@@ -34,36 +39,36 @@ A lightweight, modular penetration testing tool written in Python. This tool per
 ### ✅ Requirements
 
 - Python 3.7+
-- `pip` (Python package manager)
-- `nmap` (must be installed and accessible from command line)
-- Internet access (for live scanning)
-- Dependencies listed below
+- pip
+- `nmap` installed on your system and accessible via command line
+- Internet access for scans
 
-### 📥 Install Packages
-
-Before using the tool, install the following dependencies:
+### 📥 Install Python Dependencies
 
 ```bash
 pip install requests python-whois reportlab
 ```
 
-> Make sure `nmap` is installed and added to your system path:
-- On Linux/macOS: `sudo apt install nmap` or `brew install nmap`
-- On Windows: [Download Nmap](https://nmap.org/download.html)
+> Make sure `nmap` is installed and in your system PATH:
+- Linux: `sudo apt install nmap`
+- macOS: `brew install nmap`
+- Windows: [Download Nmap](https://nmap.org/download.html)
 
 ---
 
 ## 🚀 Usage
 
-Run the tool from the terminal:
+Run the tool via terminal:
 
 ```bash
 python main.py
 ```
 
-You’ll be presented with a menu:
+You will see an interactive menu like this:
 
 ```
+Enter target URL (e.g., http://testphp.vulnweb.com):
+
 Select Scan Option:
 1. Full Scan
 2. Reconnaissance Only
@@ -72,51 +77,53 @@ Select Scan Option:
 5. Exit
 ```
 
-Enter the URL you want to scan (e.g., `http://testphp.vulnweb.com`) and select an option.
-
-### 📁 Reports
-
-After the scan completes, reports will be saved in your working directory:
-- `pentest_report.txt`
-- `pentest_report.pdf`
+Choose your desired scan mode, and the tool will start scanning the given target.
 
 ---
 
-## 📂 Project Structure
+## 📂 Report Outputs
+
+After scanning, the following files will be created in the working directory:
+
+| File                | Format  | Purpose                     |
+|---------------------|---------|-----------------------------|
+| `pentest_report.txt`  | TXT     | Raw, plain-text report      |
+| `pentest_report.pdf`  | PDF     | Printable report            |
+| `pentest_report.json` | JSON    | Structured, machine-readable|
+| `pentest_report.html` | HTML    | Stylish browser-viewable    |
+
+You can configure severity filters (e.g., only include Medium+ findings) in the code.
+
+---
+
+## 📁 Project Structure
 
 ```
 .
-├── main.py          # Entry point with CLI menu
-├── recon.py         # Reconnaissance module
-├── scanner.py       # Port scanning & CVE check
-├── exploit.py       # Simulated exploitation module
-├── reporter.py      # Report generation (TXT + PDF)
-├── README.md        # You're reading it!
+├── main.py           # Entry point CLI menu
+├── recon.py          # Reconnaissance logic
+├── scanner.py        # Port/CVE scan logic
+├── exploit.py        # Simulated attack checks
+├── reporter.py       # Multi-format reporting system
+├── README.md         # You're reading it!
 ```
 
 ---
 
-## 💡 Example Target (Practice)
+## ⚠️ Disclaimer
 
-Try scanning this intentionally vulnerable website:
-```
-http://testphp.vulnweb.com
-```
-
----
-
-## ⚠️ Legal Disclaimer
-
-This tool is for **educational and ethical hacking purposes only**. Do not scan or attack any system without **explicit permission**. Unauthorized access is illegal.
+This tool is for **educational and authorized testing purposes only**.  
+Do not scan or attack systems without **explicit permission**. Unauthorized usage is illegal and unethical.
 
 ---
 
 ## 🧠 Author Notes
 
-Built as a learning project to demonstrate how different phases of penetration testing work — from recon to reporting — all in Python. Pull requests and suggestions are welcome!
+This project was built to demonstrate how basic penetration testing tools can be created in Python.  
+PRs, suggestions, and ethical hackers welcome!
 
 ---
 
 ## 📜 License
 
-This project is open-source and licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
