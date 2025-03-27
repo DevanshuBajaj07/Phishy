@@ -1,55 +1,83 @@
-# =================== scanner.py ===================
-# This module scans the target for open ports and known vulnerabilities.
+# scanner.py
+# This module performs network scanning using Nmap and simulates basic vulnerability detection.
 
 import subprocess
 from reporter import Reporter
 
 def nmap_service_scan(ip):
     """
-    Runs a basic Nmap scan to discover open ports and services.
-    Returns both raw formatted results and a list of parsed services.
+    Uses Nmap to scan the target IP address for open ports and running services.
+    Returns a formatted string for the report and a list of found services.
     """
     try:
+        # Run the Nmap command with -sV to detect service versions
         result = subprocess.check_output(["nmap", "-sV", ip], stderr=subprocess.STDOUT).decode()
-        table = []
+
+        table = []  # Store tuples of (port, state, service name)
         for line in result.splitlines():
+            # We're interested in lines with 'tcp' or 'udp' and an 'open' state
             if any(proto in line for proto in ["tcp", "udp"]) and "open" in line:
                 parts = line.split()
                 if len(parts) >= 3:
-                    table.append((parts[0], parts[1], " ".join(parts[2:])))
+                    # Example line: "80/tcp open http"
+                    table.append((parts[0], parts[1], " ".join(parts[2:])))  # e.g. ('80/tcp', 'open', 'http')
+
         if not table:
             return "No open ports detected.", []
+
+        # Format the output nicely for the report
         formatted = "\n".join([f"{p:<10} {s:<10} {n}" for p, s, n in table])
         return formatted, table
+
     except subprocess.CalledProcessError as e:
-        return f"Nmap scan failed: {e.output.decode()}", []
+        # If Nmap returns a non-zero exit code (usually due to errors), show output
+        return f"Nmap scan failed:\n{e.output.decode()}", []
+
+    except FileNotFoundError:
+        # Nmap is not installed or not found in PATH
+        return "Nmap is not installed or not found in your system PATH.", []
+
+    except Exception as e:
+        # Any other unexpected error
+        return f"Unexpected error during Nmap scan: {str(e)}", []
 
 def simulated_cve_check(services):
     """
-    Simulates a basic CVE check using service names against known issues.
-    Returns a summary of simulated vulnerabilities.
+    Simulates a CVE check by comparing known vulnerable services.
+    Each matched service is given a severity level and suggested remediation.
     """
+    # Simulated database of vulnerable services (just a few examples)
     known_issues = {
-        "Apache": ("Medium", "Ensure latest version is patched."),
-        "OpenSSH": ("High", "Restrict SSH access and keep updated."),
-        "MySQL": ("High", "Update MySQL and restrict DB access."),
+        "Apache": ("Medium", "Ensure the latest version is patched."),
+        "OpenSSH": ("High", "Restrict SSH access and keep OpenSSH updated."),
+        "MySQL": ("High", "Update MySQL and restrict database access."),
     }
+
     findings = []
+
+    # Check each service name against known issues
     for _, _, service in services:
         for keyword in known_issues:
             if keyword.lower() in service.lower():
                 severity, fix = known_issues[keyword]
                 findings.append((keyword, severity, fix))
+
+    # Format results for reporting
     if not findings:
         return "No known vulnerable services found."
-    return "\n".join([f"{s} - Severity: {sev}\nRemediation: {fix}" for s, sev, fix in findings])
+
+    return "\n".join([f"{service} - Severity: {severity}\nRemediation: {fix}" for service, severity, fix in findings])
 
 def run_scan(ip, reporter: Reporter):
     """
-    Runs the port and service scan and adds any CVE results to the report.
+    Runs the full scan process:
+    1. Nmap port and service discovery
+    2. Simulated CVE check
+    Results are added to the final report.
     """
     nmap_result, services = nmap_service_scan(ip)
     reporter.add_section("Open Ports and Services", nmap_result)
+
     if services:
         cve_result = simulated_cve_check(services)
         reporter.add_section("Known Vulnerability Check (Simulated)", cve_result)
