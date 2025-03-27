@@ -1,4 +1,7 @@
-# reporter.py
+# =================== reporter.py ===================
+# This module handles report generation.
+# It saves both text and PDF versions of the scan results.
+
 from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
@@ -11,25 +14,30 @@ PDF_REPORT = "pentest_report.pdf"
 
 class Reporter:
     def __init__(self):
+        """Initializes the report and clears previous reports if any."""
         self.sections = []
         self.clear_reports()
 
     def clear_reports(self):
+        """Removes existing report files to start fresh."""
         open(TXT_REPORT, "w").close()
         if os.path.exists(PDF_REPORT):
             os.remove(PDF_REPORT)
         self.sections.clear()
 
     def add_section(self, title, content):
+        """Adds a section of findings to the report."""
         self.sections.append((title, content))
         with open(TXT_REPORT, "a") as f:
             f.write(f"\n## {title} ##\n{content}\n")
 
     def finalize(self):
+        """Finalizes the report by saving all content to a PDF file."""
         self.generate_pdf_report()
         print(f"\n[+] Reports saved to:\n - {TXT_REPORT}\n - {PDF_REPORT}")
 
     def generate_pdf_report(self):
+        """Handles PDF report formatting and writing."""
         c = canvas.Canvas(PDF_REPORT, pagesize=letter)
         width, height = letter
         margin = 40
