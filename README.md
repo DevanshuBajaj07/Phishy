@@ -61,7 +61,7 @@ pip install requests python-whois reportlab
 Run the tool via terminal:
 
 ```bash
-python main.py --nmap-flags "-sS -p-"
+python main.py
 ```
 
 You will see an interactive menu like this:
