@@ -1,37 +1,55 @@
-# reporter.py
-# Handles saving of scan results to TXT and HTML reports.
+# reporter.py - Handles saving scan results to TXT and HTML reports
 
 from datetime import datetime
 import os
+from colorama import Fore  # For colored output
 
+# Default text file report name
 DEFAULT_TXT_REPORT = "pentest_report.txt"
 
 class Reporter:
+    """
+    Reporter class is responsible for collecting and exporting results
+    into readable TXT and styled HTML reports.
+    """
     def __init__(self, txt_filename=DEFAULT_TXT_REPORT):
         self.txt_filename = txt_filename
-        self.sections = []
-        self.clear_reports()
+        self.sections = []  # List of (title, content) sections
+        self.clear_reports()  # Reset existing reports when initialized
 
     def clear_reports(self):
+        """
+        Clear the TXT report file and reset the section list.
+        """
         try:
             open(self.txt_filename, "w").close()
             self.sections.clear()
+            print(Fore.CYAN + f"[*] Starting fresh report: {self.txt_filename}")
         except Exception as e:
-            print(f"[!] Error clearing TXT report: {str(e)}")
+            print(Fore.RED + f"[!] Error clearing TXT report: {str(e)}")
 
     def add_section(self, title, content):
+        """
+        Add a titled section to the report and write to the TXT file immediately.
+        """
         self.sections.append((title, content))
         try:
             with open(self.txt_filename, "a", encoding="utf-8") as f:
                 f.write(f"\n## {title} ##\n{content}\n")
         except Exception as e:
-            print(f"[!] Error writing to TXT report: {str(e)}")
+            print(Fore.RED + f"[!] Error writing to TXT report: {str(e)}")
 
     def finalize(self):
+        """
+        Finalize the report generation by saving the HTML report.
+        """
         self.save_html_report()
-        print(f"\n[+] Reports saved to:\n - {self.txt_filename}\n - pentest_report.html")
+        print(Fore.GREEN + f"\n[+] Reports saved to:\n - {self.txt_filename}\n - pentest_report.html")
 
     def save_html_report(self):
+        """
+        Convert report sections into a styled HTML report.
+        """
         try:
             with open("pentest_report.html", "w", encoding="utf-8") as f:
                 f.write(f"""<!DOCTYPE html>
@@ -92,6 +110,6 @@ class Reporter:
 """)
 
                 f.write("</body></html>")
-            print("[+] HTML report saved as: pentest_report.html")
+            print(Fore.GREEN + "[+] HTML report saved as: pentest_report.html")
         except Exception as e:
-            print(f"[!] Error saving HTML report: {str(e)}")
+            print(Fore.RED + f"[!] Error saving HTML report: {str(e)}")
