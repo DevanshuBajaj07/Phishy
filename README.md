@@ -26,10 +26,8 @@ A modular and extensible penetration testing framework built in Python. It perfo
 - 📝 **Reporting**
   - Multiple report formats:
     - ✅ Text (.txt)
-    - ✅ PDF (.pdf)
-    - ✅ JSON (.json)
     - ✅ HTML (.html)
-  - Severity-based filtering for JSON/HTML
+  - Severity-based filtering for HTML
   - Auto-timestamped metadata
 
 ---
