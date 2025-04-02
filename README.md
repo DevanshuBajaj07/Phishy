@@ -61,7 +61,7 @@ pip install requests python-whois reportlab
 Run the tool via terminal:
 
 ```bash
-python main.py --nmap-flags "-sS -p-"
+python main.py 
 ```
 
 You will see an interactive menu like this:
@@ -107,8 +107,6 @@ After scanning, the following files will be created in the working directory:
 | File                | Format  | Purpose                     |
 |---------------------|---------|-----------------------------|
 | `pentest_report.txt`  | TXT     | Raw, plain-text report      |
-| `pentest_report.pdf`  | PDF     | Printable report            |
-| `pentest_report.json` | JSON    | Structured, machine-readable|
 | `pentest_report.html` | HTML    | Stylish browser-viewable    |
 
 ---
@@ -142,6 +140,3 @@ PRs, suggestions, and ethical hackers welcome!
 
 ---
 
-## 📜 License
-
-This project is licensed under the [MIT License](LICENSE).
